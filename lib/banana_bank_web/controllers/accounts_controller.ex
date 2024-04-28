@@ -1,0 +1,24 @@
+defmodule BananaBankWeb.AccountsController do
+  use BananaBankWeb, :controller
+
+  alias BananaBank.Accounts
+  alias BananaBank.Accounts.Account
+
+  action_fallback BananaBankWeb.FallbackController
+
+  def create(conn, params) do
+    with {:ok, %Account{} = account} <- Accounts.create(params) do
+      conn
+      |> put_status(:created)
+      |> render(:create, account: account)
+    end
+  end
+
+  def transaction(conn, params) do
+    with {:ok, result} <- Accounts.transaction(params) do
+      conn
+      |> put_status(:ok)
+      |> render(:transaction, transaction: result)
+    end
+  end
+end
